@@ -1,6 +1,7 @@
-require 'open-uri'
-require 'pry'
-require 'nokogiri'
+#require 'open-uri'
+require_relative '../config/environment'
+#require 'pry'
+#require 'nokogiri'
 
 class Scraper
 
@@ -19,19 +20,29 @@ class Scraper
     if ti.text.include? "PREVIEW" then nil
     elsif ti.text.include? "Citizens Only" then nil
     elsif ti.text.include? "Citizen Edition" then nil
-    else puts "#{counter}: #{ti.text}"
+    else puts "#{counter}: #{ti.text.class}"
     end
   end
 end
 
   def get_tags #gets tags from inside article class, doesn't support more than one word tags
-        self.scrape_podcast_page.xpath("//article").each_with_index do |tag_set,i|
-      puts "#{i} #{tag_set.to_s.scan(/(tag-)(\w+)/)} "
+    #produces nested array
+        self.scrape_podcast_page.xpath("//article").each do |tag_set|
+      puts "#{tag_set.to_s.scan(/(tag-)(\w+)/)} "
     end
   end
 
+  def scrape
+    self.scrape_podcast_page.xpath("//header[@class='entry-header']/h2[@class='entry-title']/a/../../..").each do |node|
+    if "#{node.attribute('class')}".include?('nietzsche') then puts "#{node.attribute('class')}"
+    end
+  end
 end
-  binding.pry
 
+end
+
+binding.pry
 #find tags - attr('class').value
 #regex for tags in strings? (tag-)(\w+)
+#each_with_index do |post, i| puts "#{i }#{post..attr('class').value} "
+#if puts "#{node.attribute('class')}".include?('nietzsche') then puts "#{node.attribute('class')}"
