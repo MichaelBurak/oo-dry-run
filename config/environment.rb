@@ -1,8 +1,8 @@
-require 'bundler'
+#require 'bundler'
 #require 'pry'
 #require 'nokogiri'
-require 'open-uri'
+#require 'open-uri'
 
-Bundler.require
+#Bundler.require
 
-require_all 'lib'
+#require_all 'lib'

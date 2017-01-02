@@ -1,8 +1,7 @@
 #require 'open-uri'
-require_relative '../config/environment'
+#require_relative '../config/environment'
 #require 'pry'
 #require 'nokogiri'
-
 class Dry_run::Scraper
 
   def scrape_podcast_page #grabs the overall page of podcasts
@@ -10,8 +9,16 @@ class Dry_run::Scraper
     end
 
   def scrape_podcast_index #grabs the names of the podcasts
-    self.scrape_podcast_page.xpath("//article/header[@class='entry-header']/h2[@class='entry-title']")
+    podray = []
+    self.scrape_podcast_page.xpath("//article/header[@class='entry-header']/h2[@class='entry-title']").each_with_index do |pod,i| podray << "#{i}, #{pod.text}"
   end
+  podray
+end
+end
+
+  def select_podcast(input) #reading wrongly as private
+  self.scrape_podcast_index[input]
+end
 
   def order #removes non-free episodes, makes a list of free episodes
     counter = 0
@@ -33,17 +40,17 @@ end
     end
   end
 
-  def scrape_related_tags(input)
+  def scrape_related_tags(input) #scrapes tags based on input ie. 'nietzsche'
     self.scrape_podcast_page.xpath("//header[@class='entry-header']/h2[@class='entry-title']/a/../../..").each do |node|
     if "#{node.attribute('class')}".include?(input) then puts "#{node.attribute('class')}"
     end
   end
 end
 
+  def create_podcast
+
 end
 
 binding.pry
 #find tags - attr('class').value
-#regex for tags in strings? (tag-)(\w+)
-#each_with_index do |post, i| puts "#{i }#{post..attr('class').value} "
-#if puts "#{node.attribute('class')}".include?('nietzsche') then puts "#{node.attribute('class')}"
+#regex for tags in strings? (tag-)(\w+) (only supports one word tags)
