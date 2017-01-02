@@ -3,7 +3,7 @@ require_relative '../config/environment'
 #require 'pry'
 #require 'nokogiri'
 
-class Scraper
+class Dry_run::Scraper
 
   def scrape_podcast_page #grabs the overall page of podcasts
       Nokogiri::HTML(open('http://www.partiallyexaminedlife.com/category/podcast-episodes/?order=ASC'))
@@ -25,16 +25,17 @@ class Scraper
   end
 end
 
-  def get_tags #gets tags from inside article class, doesn't support more than one word tags
+  def get_tags #gets tags from inside article class, doesn't support more than one word tags yet because i'm bad at regex
     #produces nested array
-        self.scrape_podcast_page.xpath("//article").each do |tag_set|
-      puts "#{tag_set.to_s.scan(/(tag-)(\w+)/)} "
+        self.scrape_podcast_page.xpath("//article").each do |tag_set| #scrapes website for every podcast
+      puts "#{tag_set.to_s.scan(/(tag-)(\w+)/)} " #puts all the tags for each
+      #could/should make this into each_with_index
     end
   end
 
-  def scrape
+  def scrape_related_tags(input)
     self.scrape_podcast_page.xpath("//header[@class='entry-header']/h2[@class='entry-title']/a/../../..").each do |node|
-    if "#{node.attribute('class')}".include?('nietzsche') then puts "#{node.attribute('class')}"
+    if "#{node.attribute('class')}".include?(input) then puts "#{node.attribute('class')}"
     end
   end
 end
